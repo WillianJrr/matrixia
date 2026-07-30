@@ -65,3 +65,24 @@ setInterval(()=>{
     const s = String(sec%60).padStart(2,"0");
     document.getElementById("timer").textContent = `${m}:${s}`;
 },1000);
+
+const siteSelect = document.getElementById("siteSelect");
+const siteFrame = document.getElementById("siteFrame");
+
+
+siteSelect.addEventListener("change", function(){
+
+    let url = this.value;
+
+
+    if(url){
+
+        siteFrame.src = url;
+
+    } else {
+
+        siteFrame.src = "";
+
+    }
+
+});

@@ -203,3 +203,25 @@ button:hover{
     .grid{grid-template-columns:repeat(5,60px);}
     .cell{width:60px;height:60px;}
 }
+
+.site-container {
+    margin-top: 25px;
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+
+.site-container h3 {
+    color: white;
+}
+
+
+#siteFrame {
+
+    width:100%;
+    height:600px;
+    border-radius:15px;
+    background:white;
+
+}
