@@ -1,73 +1,333 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matrix IA - Mines</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrix IA - Mines</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#050505;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    min-height:100vh;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:420px;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#00ff66;
+}
+
+.online{
+    margin-top:8px;
+    color:#00ff66;
+    font-size:14px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#111;
+    border:1px solid #1f1f1f;
+    border-radius:18px;
+    padding:16px;
+    text-align:center;
+}
+
+.card span{
+    color:#aaa;
+    font-size:13px;
+}
+
+.card h3{
+    color:#00ff66;
+    margin-top:8px;
+    font-size:24px;
+}
+
+.main-card{
+    background:#111;
+    border:1px solid #1f1f1f;
+    border-radius:24px;
+    padding:20px;
+}
+
+.main-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.main-top h2{
+    font-size:20px;
+}
+
+.badge{
+    background:#00ff66;
+    color:#000;
+    font-size:12px;
+    font-weight:bold;
+    padding:6px 12px;
+    border-radius:999px;
+}
+
+.info{
+    display:flex;
+    justify-content:space-between;
+    color:#aaa;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.cell{
+    aspect-ratio:1;
+    background:#1a1a1a;
+    border:1px solid #2a2a2a;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    color:#00ff66;
+}
+
+.cell.star{
+    background:#10351f;
+    border-color:#00ff66;
+    box-shadow:0 0 15px #00ff6644;
+}
+
+.timer-box{
+    background:#0b0b0b;
+    border:1px solid #1f1f1f;
+    border-radius:16px;
+    padding:16px;
+    text-align:center;
+    margin-bottom:18px;
+}
+
+.timer-box span{
+    display:block;
+    color:#aaa;
+    font-size:13px;
+    margin-bottom:6px;
+}
+
+.timer-box strong{
+    color:#00ff66;
+    font-size:28px;
+}
+
+.btn{
+    width:100%;
+    background:#00ff66;
+    color:#000;
+    border:none;
+    padding:18px;
+    border-radius:18px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 0 20px #00ff66;
+}
+
+.btn:disabled{
+    background:#444;
+    color:#bbb;
+    cursor:not-allowed;
+    box-shadow:none;
+}
+
+.footer{
+    text-align:center;
+    color:#666;
+    font-size:12px;
+    margin-top:16px;
+}
+</style>
 </head>
 <body>
 
-<canvas id="matrix"></canvas>
+<div class="container">
 
-<div class="sidebar">
-  <div class="logo">MATRIX IA</div>
-  <a class="active">Dashboard</a>
-  <a>Mines</a>
-  <a>Crash</a>
-  <a>Roleta</a>
-  <a>Configurações</a>
+    <div class="header">
+        <div class="logo">MATRIX IA</div>
+        <div class="online">● <span id="online">1.284</span> online</div>
+    </div>
+
+    <div class="stats">
+        <div class="card">
+            <span>Usuários</span>
+            <h3 id="users">12.845</h3>
+        </div>
+
+        <div class="card">
+            <span>Sinais</span>
+            <h3 id="signals">3.421</h3>
+        </div>
+
+        <div class="card">
+            <span>Acertos</span>
+            <h3 id="hits">87%</h3>
+        </div>
+
+        <div class="card">
+            <span>Status</span>
+            <h3>ATIVO</h3>
+        </div>
+    </div>
+
+    <div class="main-card">
+
+        <div class="main-top">
+            <h2>MINES PRO</h2>
+            <div class="badge">VIP</div>
+        </div>
+
+        <div class="info">
+            <span>Bora1Bet</span>
+            <span>Risco Baixo</span>
+        </div>
+
+        <div class="grid" id="grid"></div>
+
+        <div class="timer-box">
+            <span>Tempo Válido do Sinal</span>
+            <strong id="timer">02:00</strong>
+        </div>
+
+        <button class="btn" id="btn" onclick="generateSignal()">
+            GERAR SINAL
+        </button>
+
+    </div>
+
+    <div class="footer">
+        Matrix IA © 2026
+    </div>
+
 </div>
 
-<main class="main">
+<script>
+const grid = document.getElementById('grid');
+const btn = document.getElementById('btn');
 
-  <div class="topbar">
-    <div class="online-dot"></div>
-    <span id="onlineCount">1284</span> online
-  </div>
+function createGrid(){
+    grid.innerHTML='';
+    for(let i=0;i<25;i++){
+        const cell=document.createElement('div');
+        cell.className='cell';
+        cell.textContent='◆';
+        grid.appendChild(cell);
+    }
+}
 
-  <div class="stats">
-    <div class="card">
-      <span>Usuários</span>
-      <h3 id="usersCount">12845</h3>
-    </div>
-    <div class="card">
-      <span>Sinais</span>
-      <h3 id="signalsCount">3421</h3>
-    </div>
-    <div class="card">
-      <span>Acertos</span>
-      <h3 id="hitsCount">87%</h3>
-    </div>
-  </div>
+let active=false;
+let time=120;
+let interval;
 
-  <section class="mines-box">
+function updateTimer(){
+    const m=String(Math.floor(time/60)).padStart(2,'0');
+    const s=String(time%60).padStart(2,'0');
+    document.getElementById('timer').textContent=`${m}:${s}`;
+}
 
-    <div class="mines-header">
-      <h2>MINES PRO</h2>
-      <div class="badge">ATIVO</div>
-    </div>
+function startTimer(){
+    clearInterval(interval);
+    time=120;
+    updateTimer();
 
-    <div class="mines-info">
-      <div>Bora1Bet</div>
-      <div>Risco Baixo</div>
-    </div>
+    interval=setInterval(()=>{
+        time--;
+        updateTimer();
 
-    <div class="grid" id="grid"></div>
+        if(time<=0){
+            clearInterval(interval);
+            active=false;
+            btn.disabled=false;
+            btn.textContent='GERAR NOVO SINAL';
+        }
+    },1000);
+}
 
-    <div class="signal-time">
-      <span>Tempo Válido do Sinal</span>
-      <strong id="timer">02:00</strong>
-    </div>
+function generateSignal(){
+    if(active) return;
 
-    <button class="generate-btn" id="generateBtn" onclick="generateSignal()">
-      GERAR SINAL
-    </button>
+    active=true;
+    btn.disabled=true;
+    btn.textContent='SINAL EM ANDAMENTO';
 
-  </section>
+    createGrid();
 
-</main>
+    const cells=document.querySelectorAll('.cell');
+    const stars=new Set();
 
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    while(stars.size<3){
+        stars.add(Math.floor(Math.random()*25));
+    }
+
+    stars.forEach(i=>{
+        cells[i].classList.add('star');
+        cells[i].textContent='★';
+    });
+
+    startTimer();
+}
+
+createGrid();
+updateTimer();
+
+// números dinâmicos
+let online=1284, users=12845, signals=3421, hits=87;
+
+setInterval(()=>{
+    online+=Math.floor(Math.random()*3);
+    users+=Math.floor(Math.random()*2);
+    signals+=Math.floor(Math.random()*2);
+
+    document.getElementById('online').textContent=online.toLocaleString('pt-BR');
+    document.getElementById('users').textContent=users.toLocaleString('pt-BR');
+    document.getElementById('signals').textContent=signals.toLocaleString('pt-BR');
+    document.getElementById('hits').textContent=hits+'%';
+},4000);
+</script>
+
 </body>
 </html>
