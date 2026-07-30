@@ -1,79 +1,332 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Matrix IA</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
+
 <body>
 
 <canvas id="matrix"></canvas>
 
+
+<!-- MENU LATERAL -->
 <div class="sidebar">
-    <div class="logo">MATRIX IA</div>
+
+    <div class="logo">
+        ⚡ MATRIX IA
+    </div>
+
+
     <ul>
-        <li class="active">Dashboard</li>
-        <li>Mines</li>
-        <li>Crash</li>
-        <li>Roleta</li>
-        <li>Configurações</li>
+
+        <li class="active">
+            🏠 Dashboard
+        </li>
+
+        <li>
+            💣 Mines
+        </li>
+
+        <li>
+            🚀 Crash
+        </li>
+
+        <li>
+            🎯 Roleta
+        </li>
+
+        <li>
+            ⚙ Configurações
+        </li>
+
     </ul>
+
 </div>
+
+
+
+<!-- CONTEÚDO PRINCIPAL -->
 
 <div class="main">
+
+
     <div class="topbar">
-        <h1>Painel Matrix IA</h1>
-        <div class="online">● 1.284 online</div>
+
+        <h1>
+            Painel Matrix IA
+        </h1>
+
+
+        <div class="online">
+            ● 1.284 online
+        </div>
+
+
     </div>
+
+
+
+
+    <!-- CARDS -->
 
     <div class="stats">
+
+
         <div class="card">
-            <span>Usuários</span>
-            <h2>12.845</h2>
+
+            <span>
+                Usuários
+            </span>
+
+            <h2>
+                12.845
+            </h2>
+
         </div>
+
+
+
         <div class="card">
-            <span>Sinais</span>
-            <h2>3.421</h2>
+
+            <span>
+                Sinais
+            </span>
+
+            <h2>
+                3.421
+            </h2>
+
         </div>
+
+
+
+
         <div class="card">
-            <span>Acertos</span>
-            <h2>87%</h2>
+
+            <span>
+                Acertos
+            </span>
+
+            <h2>
+                87%
+            </h2>
+
         </div>
+
+
+
     </div>
+
+
+
+
+
+    <!-- PAINEL MINES -->
 
     <div class="panel">
+
+
         <div class="panel-header">
-            <h2>MINES PRO</h2>
-            <div class="badge">ATIVO</div>
+
+            <h2>
+                💣 MINES AI PRO
+            </h2>
+
+
+            <div class="badge">
+                ATIVO
+            </div>
+
+
         </div>
+
+
+
+
 
         <div class="controls">
-            <select>
-                <option>Bora1Bet</option>
-                <option>Blaze</option>
-                <option>JonBet</option>
+
+
+            <!-- PLATAFORMA -->
+
+            <select id="siteSelect">
+
+                <option value="">
+                    Escolha a plataforma
+                </option>
+
+
+                <option value="https://bora1bet.com">
+                    Bora1Bet
+                </option>
+
+
+                <option value="https://blaze.com">
+                    Blaze
+                </option>
+
+
+                <option value="https://jonbet.com">
+                    JonBet
+                </option>
+
+
             </select>
 
+
+
+
+
+            <!-- RISCO -->
+
             <select>
-                <option>Risco Baixo</option>
-                <option>Risco Médio</option>
-                <option>Risco Alto</option>
+
+
+                <option>
+                    Risco Baixo
+                </option>
+
+
+                <option>
+                    Risco Médio
+                </option>
+
+
+                <option>
+                    Risco Alto
+                </option>
+
+
             </select>
+
+
+
         </div>
 
-        <div class="grid" id="grid"></div>
+
+
+
+
+
+        <!-- GRID MINES -->
+
+        <div class="grid" id="grid">
+
+        </div>
+
+
+
+
+
+
+
+        <!-- INFORMAÇÕES -->
 
         <div class="info">
-            <div>Minas: <strong>3</strong></div>
-            <div>Tentativas: <strong>1</strong></div>
-            <div>Tempo: <strong id="timer">00:00</strong></div>
+
+
+            <div>
+                Minas:
+                <strong>
+                    3
+                </strong>
+            </div>
+
+
+
+            <div>
+                Tentativas:
+                <strong>
+                    1
+                </strong>
+            </div>
+
+
+
+
+            <div>
+                Tempo:
+                <strong id="timer">
+                    00:00
+                </strong>
+            </div>
+
+
+
         </div>
 
-        <button id="generate">GERAR SINAL</button>
+
+
+
+
+
+
+        <!-- BOTÃO -->
+
+        <button id="generate">
+
+            GERAR SINAL
+
+        </button>
+
+
+
+
+
+
+
+
+        <!-- SITE DA PLATAFORMA -->
+
+        <div class="site-container">
+
+
+            <h3>
+                Plataforma selecionada
+            </h3>
+
+
+
+            <iframe
+
+                id="siteFrame"
+
+                src=""
+
+                frameborder="0">
+
+            </iframe>
+
+
+
+        </div>
+
+
+
+
+
     </div>
+
+
+
 </div>
 
+
+
+
+
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
 </body>
+
 </html>
+```
