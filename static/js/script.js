@@ -1,88 +1,165 @@
-// Fundo Matrix
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
+// ===== FUNDO MATRIX =====
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const letters = "01アイウエオカキクケコサシスセソタチツテトナニヌネノ";
+let matrixWidth = 0;
+let matrixHeight = 0;
+const chars = '01';
 const fontSize = 14;
-const columns = canvas.width / fontSize;
-const drops = Array(Math.floor(columns)).fill(1);
+let drops = [];
 
-function drawMatrix(){
-    ctx.fillStyle = "rgba(0,0,0,0.05)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-
-    ctx.fillStyle = "#00ff66";
-    ctx.font = fontSize + "px monospace";
-
-    for(let i=0;i<drops.length;i++){
-        const text = letters[Math.floor(Math.random()*letters.length)];
-        ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-
-        if(drops[i]*fontSize > canvas.height && Math.random() > 0.975){
-            drops[i]=0;
-        }
-        drops[i]++;
-    }
+function resizeMatrix() {
+  matrixWidth = canvas.width = window.innerWidth;
+  matrixHeight = canvas.height = window.innerHeight;
+  drops = Array.from(
+    { length: Math.ceil(matrixWidth / fontSize) },
+    () => Math.random() * -20
+  );
 }
 
-setInterval(drawMatrix,33);
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(5, 8, 6, 0.08)';
+  ctx.fillRect(0, 0, matrixWidth, matrixHeight);
+  ctx.fillStyle = '#00e86b';
+  ctx.font = `${fontSize}px monospace`;
 
-// Grade 5x5
-const grid = document.getElementById("grid");
+  drops.forEach((y, i) => {
+    const char = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillText(char, i * fontSize, y * fontSize);
+    if (y * fontSize > matrixHeight && Math.random() > 0.975) drops[i] = 0;
+    drops[i] += 1;
+  });
+}
 
-for(let i=0;i<25;i++){
-    const cell = document.createElement("div");
-    cell.className = "cell";
-    cell.innerHTML = "◆";
+resizeMatrix();
+window.addEventListener('resize', resizeMatrix);
+setInterval(drawMatrix, 55);
+
+// ===== GRID MINES =====
+const grid = document.getElementById('grid');
+const button = document.getElementById('generateBtn');
+const bettingHouse = document.getElementById('bettingHouse');
+const selectedHouse = document.getElementById('selectedHouse');
+const houseMessage = document.getElementById('houseMessage');
+
+function createGrid() {
+  grid.innerHTML = '';
+  for (let i = 0; i < 25; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.textContent = '◆';
     grid.appendChild(cell);
+  }
 }
 
-// Botão gerar sinal (visual)
-document.getElementById("generate").addEventListener("click",()=>{
-    const cells = document.querySelectorAll(".cell");
-    cells.forEach(c=>c.classList.remove("active"));
+// ===== CONTADOR: 2 MINUTOS =====
+let time = 120;
+let interval = null;
+let signalActive = false;
 
-    const selected = [];
-    while(selected.length < 3){
-        const n = Math.floor(Math.random()*25);
-        if(!selected.includes(n)) selected.push(n);
+function updateTimer() {
+  const minutes = String(Math.floor(time / 60)).padStart(2, '0');
+  const seconds = String(time % 60).padStart(2, '0');
+  document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+}
+
+function startTimer() {
+  clearInterval(interval);
+  time = 120;
+  updateTimer();
+
+  interval = setInterval(() => {
+    time--;
+    updateTimer();
+
+    if (time <= 0) {
+      clearInterval(interval);
+      signalActive = false;
+      button.disabled = false;
+      button.textContent = 'GERAR NOVO SINAL';
     }
+  }, 1000);
+}
 
-    selected.forEach(i=>{
-        cells[i].classList.add("active");
-        cells[i].innerHTML = "★";
-    });
+// ===== CASA DE APOSTA =====
+bettingHouse.addEventListener('change', () => {
+  const name = bettingHouse.value;
+  selectedHouse.textContent = name;
+  houseMessage.textContent = `Casa selecionada: ${name}`;
+  houseMessage.classList.add('ok');
+
+  if (!signalActive) {
+    button.disabled = false;
+    button.textContent = 'GERAR SINAL';
+  }
 });
 
-// Cronômetro
-let sec = 0;
-setInterval(()=>{
-    sec++;
-    const m = String(Math.floor(sec/60)).padStart(2,"0");
-    const s = String(sec%60).padStart(2,"0");
-    document.getElementById("timer").textContent = `${m}:${s}`;
-},1000);
+// ===== GERAR SINAL =====
+function generateSignal() {
+  if (signalActive || !bettingHouse.value) return;
 
-const siteSelect = document.getElementById("siteSelect");
-const siteFrame = document.getElementById("siteFrame");
+  signalActive = true;
+  button.disabled = true;
+  button.textContent = 'SINAL EM ANDAMENTO';
 
+  createGrid();
 
-siteSelect.addEventListener("change", function(){
+  const cells = document.querySelectorAll('.cell');
+  const stars = new Set();
 
-    let url = this.value;
+  while (stars.size < 3) {
+    stars.add(Math.floor(Math.random() * 25));
+  }
 
+  stars.forEach(index => {
+    cells[index].classList.add('star');
+    cells[index].textContent = '★';
+  });
 
-    if(url){
+  startTimer();
+}
 
-        siteFrame.src = url;
+button.addEventListener('click', generateSignal);
 
-    } else {
+// ===== NÚMEROS DINÂMICOS =====
+// Valores menores e com variação aleatória, sem repetir o mesmo número em sequência.
+let online = 47;
+let users = 186;
+let signals = 29;
+let hits = 87;
 
-        siteFrame.src = "";
+function randomDifferent(min, max, current) {
+  let value = current;
+  while (value === current) {
+    value = Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  return value;
+}
 
-    }
+function updateStats() {
+  online = randomDifferent(28, 69, online);
+  users = randomDifferent(132, 249, users);
+  signals = randomDifferent(16, 43, signals);
+  hits = randomDifferent(82, 94, hits);
 
-});
+  document.getElementById('onlineCount').textContent =
+    online.toLocaleString('pt-BR');
+
+  document.getElementById('usersCount').textContent =
+    users.toLocaleString('pt-BR');
+
+  document.getElementById('signalsCount').textContent =
+    signals.toLocaleString('pt-BR');
+
+  document.getElementById('hitsCount').textContent = `${hits}%`;
+}
+
+// Atualiza em intervalos diferentes para não parecer um contador fixo.
+setInterval(updateStats, 4500);
+setTimeout(updateStats, 2200);
+
+// ===== ESTADO INICIAL =====
+createGrid();
+updateTimer();
+button.disabled = true;
+button.textContent = 'SELECIONE A CASA';
