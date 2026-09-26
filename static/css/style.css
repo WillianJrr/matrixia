@@ -1,525 +1,436 @@
-// ===== FUNDO MATRIX =====
-
-const canvas = document.getElementById('matrix');
-const ctx = canvas.getContext('2d');
-
-let matrixWidth = 0;
-let matrixHeight = 0;
-
-const chars = '01';
-const fontSize = 14;
-
-let drops = [];
-
-function resizeMatrix() {
-
-  matrixWidth = canvas.width = window.innerWidth;
-  matrixHeight = canvas.height = window.innerHeight;
-
-  drops = Array.from(
-    { length: Math.ceil(matrixWidth / fontSize) },
-    () => Math.random() * -20
-  );
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-function drawMatrix() {
-
-  ctx.fillStyle = 'rgba(5, 8, 6, 0.08)';
-  ctx.fillRect(0, 0, matrixWidth, matrixHeight);
-
-  ctx.fillStyle = '#00e86b';
-  ctx.font = `${fontSize}px monospace`;
-
-  drops.forEach((y, i) => {
-
-    const char =
-      chars[Math.floor(Math.random() * chars.length)];
-
-    ctx.fillText(
-      char,
-      i * fontSize,
-      y * fontSize
-    );
-
-    if (
-      y * fontSize > matrixHeight &&
-      Math.random() > 0.975
-    ) {
-      drops[i] = 0;
-    }
-
-    drops[i] += 1;
-
-  });
-
+:root {
+  --green: #00e86b;
+  --green-soft: #0f2d1c;
+  --bg: #050806;
+  --panel: rgba(11, 17, 13, .94);
+  --border: #193122;
+  --muted: #8d9991;
 }
 
-resizeMatrix();
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: #fff;
+  overflow-x: hidden;
+}
 
-window.addEventListener(
-  'resize',
-  resizeMatrix
-);
+#matrix {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: .16;
+}
 
-setInterval(
-  drawMatrix,
-  55
-);
+.page {
+  width: min(100% - 30px, 760px);
+  margin: 0 auto;
+  padding: 24px 0 30px;
+}
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 18px;
+}
 
-// ===== ELEMENTOS =====
+.logo {
+  color: #fff;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
 
-const grid =
-  document.getElementById('grid');
+.logo span {
+  color: var(--green);
+}
 
-const button =
-  document.getElementById('generateBtn');
+.subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
 
-const bettingHouse =
-  document.getElementById('bettingHouse');
+.online-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  background: rgba(10, 18, 13, .9);
+  border-radius: 999px;
+  color: #b9c5be;
+  font-size: 12px;
+  white-space: nowrap;
+}
 
-const selectedHouse =
-  document.getElementById('selectedHouse');
+.online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+}
 
-const houseMessage =
-  document.getElementById('houseMessage');
+.online-pill strong {
+  color: var(--green);
+}
 
-const mineCount =
-  document.getElementById('mineCount');
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
 
-const riskDisplay =
-  document.getElementById('riskDisplay');
+.card {
+  min-width: 0;
+  padding: 15px 12px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 15px;
+}
 
-const bettingSite =
-  document.getElementById('bettingSite');
+.card span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 7px;
+}
 
-const bettingFrame =
-  document.getElementById('bettingFrame');
+.card h3 {
+  color: var(--green);
+  font-size: 21px;
+  line-height: 1;
+}
 
-const bettingSiteName =
-  document.getElementById('bettingSiteName');
+.status-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+}
 
+.status-card i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
 
-// ===== GRID =====
+.mines-box {
+  padding: 20px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 22px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .28);
+}
 
-function createGrid() {
+.mines-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
 
-  grid.innerHTML = '';
+.eyebrow {
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
 
-  for (let i = 0; i < 25; i++) {
+.mines-header h1 {
+  font-size: 22px;
+  margin-top: 4px;
+}
 
-    const cell =
-      document.createElement('div');
+.badge {
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: var(--green);
+  color: #031108;
+  font-size: 10px;
+  font-weight: 800;
+}
 
-    cell.className = 'cell';
+.controls label {
+  display: block;
+  color: #cbd4ce;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
 
-    cell.textContent = '◆';
+select {
+  width: 100%;
+  height: 48px;
+  padding: 0 42px 0 14px;
+  color: #fff;
+  background: #0a100c;
+  border: 1px solid #294334;
+  border-radius: 13px;
+  outline: none;
+  font-size: 14px;
+  cursor: pointer;
+  appearance: auto;
+}
 
-    grid.appendChild(cell);
+select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(0, 232, 107, .09);
+}
 
+.house-message {
+  min-height: 17px;
+  margin-top: 6px;
+  color: #78847c;
+  font-size: 11px;
+}
+
+.house-message.ok {
+  color: var(--green);
+}
+
+.mines-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 8px 0 14px;
+  color: #aeb9b1;
+  font-size: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 9px;
+  margin-bottom: 15px;
+}
+
+.cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #203127;
+  border-radius: 12px;
+  background: #0c120e;
+  color: #35503e;
+  font-size: 18px;
+  transition: .2s;
+}
+
+.cell.star {
+  color: var(--green);
+  background: #0d2919;
+  border-color: var(--green);
+  box-shadow: 0 0 15px rgba(0, 232, 107, .16);
+}
+
+.signal-time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  background: #080d0a;
+  border-radius: 14px;
+}
+
+.signal-time span {
+  display: block;
+  color: #dce4df;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.signal-time small {
+  display: block;
+  color: #68756d;
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+.signal-time strong {
+  color: var(--green);
+  font-size: 25px;
+  min-width: 70px;
+  text-align: right;
+}
+
+.generate-btn {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--green);
+  color: #031108;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.generate-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(0, 232, 107, .18);
+}
+
+.generate-btn:disabled {
+  background: #27312b;
+  color: #7e8981;
+  cursor: not-allowed;
+}
+
+footer {
+  text-align: center;
+  color: #526057;
+  font-size: 10px;
+  margin-top: 14px;
+}
+
+.controls + .controls {
+  margin-top: 14px;
+}
+
+.controls select {
+  width: 100%;
+}
+
+/* ===== SITE DA CASA DE APOSTA ===== */
+
+.betting-site {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(0, 255, 102, 0.12);
+}
+
+.betting-site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.betting-site-header h2 {
+  margin: 4px 0 0;
+  font-size: 20px;
+}
+
+.site-status {
+  font-size: 11px;
+  font-weight: 700;
+  color: #00e86b;
+  border: 1px solid rgba(0, 232, 107, 0.25);
+  background: rgba(0, 232, 107, 0.08);
+  padding: 6px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.betting-frame-container {
+  width: 100%;
+  height: 650px;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 255, 102, 0.14);
+  background: #050805;
+}
+
+#bettingFrame {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+  background: #050805;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 768px) {
+
+  .betting-frame-container {
+    height: 560px;
+    border-radius: 14px;
   }
 
+  .betting-site-header h2 {
+    font-size: 18px;
+  }
 }
 
+@media (max-width: 620px) {
 
-// ===== RISCO =====
-
-function updateRisk() {
-
-  const mines =
-    Number(mineCount.value);
-
-  const risks = {
-
-    1: 'Risco baixo',
-
-    2: 'Risco moderado',
-
-    3: 'Risco médio',
-
-    4: 'Risco alto',
-
-    5: 'Risco muito alto'
-
-  };
-
-  riskDisplay.textContent =
-    risks[mines];
-
-}
-
-mineCount.addEventListener(
-  'change',
-  updateRisk
-);
-
-
-// ===== CONTADOR: 2 MINUTOS =====
-
-let time = 120;
-
-let interval = null;
-
-let signalActive = false;
-
-
-function updateTimer() {
-
-  const minutes =
-    String(Math.floor(time / 60))
-      .padStart(2, '0');
-
-  const seconds =
-    String(time % 60)
-      .padStart(2, '0');
-
-  document.getElementById('timer')
-    .textContent =
-      `${minutes}:${seconds}`;
-
-}
-
-
-function startTimer() {
-
-  clearInterval(interval);
-
-  time = 120;
-
-  updateTimer();
-
-  interval = setInterval(() => {
-
-    time--;
-
-    updateTimer();
-
-    if (time <= 0) {
-
-      clearInterval(interval);
-
-      signalActive = false;
-
-      button.disabled = false;
-
-      button.textContent =
-        'GERAR NOVO SINAL';
-
-    }
-
-  }, 1000);
-
-}
-
-
-// ===== CASA DE APOSTA =====
-
-bettingHouse.addEventListener('change', () => {
-
-  const selectedOption =
-    bettingHouse.options[
-      bettingHouse.selectedIndex
-    ];
-
-  const name =
-    selectedOption.textContent.trim();
-
-  const url =
-    selectedOption.dataset.url;
-
-
-  // Atualiza informações da casa
-
-  selectedHouse.textContent =
-    name;
-
-  houseMessage.textContent =
-    `Casa selecionada: ${name}`;
-
-  houseMessage.classList.add('ok');
-
-
-  // Libera o botão para gerar o sinal
-
-  if (!signalActive) {
-
-    button.disabled = false;
-
-    button.textContent =
-      'GERAR SINAL';
-
+  .page {
+    width: min(100% - 20px, 760px);
+    padding-top: 15px;
   }
 
-
-  // ==========================================
-  // MOSTRAR CASA DENTRO DA PRÓPRIA MATRIX IA
-  // ==========================================
-
-  if (url && url !== '#') {
-
-    // Mostra a área da casa
-
-    bettingSite.style.display =
-      'block';
-
-
-    // Atualiza o nome da casa
-
-    bettingSiteName.textContent =
-      name;
-
-
-    // Limpa o iframe primeiro
-
-    bettingFrame.src =
-      'about:blank';
-
-
-    // Aguarda a área aparecer antes de carregar o site
-
-    setTimeout(() => {
-
-      bettingFrame.src =
-        url;
-
-
-      // Rola suavemente até a casa
-
-      bettingSite.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-
-    }, 100);
-
-
-  } else {
-
-    // Se a casa não possui URL,
-    // esconde a área do site
-
-    bettingSite.style.display =
-      'none';
-
-    bettingFrame.src =
-      'about:blank';
-
+  .header {
+    align-items: flex-start;
   }
 
-});
-
-
-// ===== GERAR SINAL =====
-
-function generateSignal() {
-
-  if (
-    signalActive ||
-    !bettingHouse.value
-  ) {
-    return;
+  .logo {
+    font-size: 22px;
   }
 
-
-  signalActive = true;
-
-  button.disabled = true;
-
-  button.textContent =
-    'SINAL EM ANDAMENTO';
-
-
-  createGrid();
-
-
-  const cells =
-    document.querySelectorAll('.cell');
-
-
-  const stars =
-    new Set();
-
-
-  // Quantidade escolhida pelo usuário
-
-  const selectedMines =
-    Number(mineCount.value);
-
-
-  // Gera exatamente a quantidade escolhida
-
-  while (
-    stars.size < selectedMines
-  ) {
-
-    stars.add(
-      Math.floor(
-        Math.random() * 25
-      )
-    );
-
+  .online-pill {
+    padding: 8px 10px;
   }
 
-
-  // Mostra as estrelas
-
-  stars.forEach(index => {
-
-    cells[index]
-      .classList.add('star');
-
-    cells[index].textContent =
-      '★';
-
-  });
-
-
-  // Inicia o contador
-
-  startTimer();
-
-}
-
-
-// ===== BOTÃO =====
-
-button.addEventListener(
-  'click',
-  generateSignal
-);
-
-
-// ===== NÚMEROS DINÂMICOS =====
-
-let online = 47;
-
-let users = 186;
-
-let signals = 29;
-
-let hits = 87;
-
-
-function randomDifferent(
-  min,
-  max,
-  current
-) {
-
-  let value = current;
-
-  while (
-    value === current
-  ) {
-
-    value =
-      Math.floor(
-        Math.random() *
-        (max - min + 1)
-      ) + min;
-
+  .stats {
+    grid-template-columns: 1fr 1fr;
   }
 
-  return value;
+  .mines-box {
+    padding: 15px;
+    border-radius: 18px;
+  }
 
+  .mines-header h1 {
+    font-size: 19px;
+  }
+
+  .grid {
+    gap: 6px;
+  }
+
+  .cell {
+    border-radius: 9px;
+    font-size: 16px;
+  }
+
+  .signal-time {
+    padding: 12px;
+  }
+
+  .signal-time strong {
+    font-size: 22px;
+  }
 }
 
+@media (max-width: 380px) {
 
-function updateStats() {
+  .header {
+    flex-direction: column;
+  }
 
-  online =
-    randomDifferent(
-      28,
-      69,
-      online
-    );
-
-  users =
-    randomDifferent(
-      132,
-      249,
-      users
-    );
-
-  signals =
-    randomDifferent(
-      16,
-      43,
-      signals
-    );
-
-  hits =
-    randomDifferent(
-      82,
-      94,
-      hits
-    );
-
-
-  document.getElementById(
-    'onlineCount'
-  ).textContent =
-    online.toLocaleString('pt-BR');
-
-
-  document.getElementById(
-    'usersCount'
-  ).textContent =
-    users.toLocaleString('pt-BR');
-
-
-  document.getElementById(
-    'signalsCount'
-  ).textContent =
-    signals.toLocaleString('pt-BR');
-
-
-  document.getElementById(
-    'hitsCount'
-  ).textContent =
-    `${hits}%`;
-
-}
-
-
-setInterval(
-  updateStats,
-  4500
-);
-
-setTimeout(
-  updateStats,
-  2200
-);
-
-
-// ===== ESTADO INICIAL =====
-
-createGrid();
-
-updateTimer();
-
-updateRisk();
-
-button.disabled = true;
-
-button.textContent =
-  'SELECIONE A CASA';
-
-
-// ===== GARANTIR SITE OCULTO NO INÍCIO =====
-
-if (bettingSite) {
-
-  bettingSite.style.display =
-    'none';
-
-}
-
-if (bettingFrame) {
-
-  bettingFrame.src =
-    'about:blank';
-
+  .online-pill {
+    align-self: flex-start;
+  }
 }
