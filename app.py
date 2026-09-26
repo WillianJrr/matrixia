@@ -5,9 +5,8 @@ app = Flask(__name__)
 
 BETTING_HOUSES = [
     {"name": "Bora1Bet", "url": "https://bora1bet.vip/register?code=TVSXVQIP1O"},
-    {"name": "Betano", "url": "#"},
-    {"name": "Bet365", "url": "#"},
-    {"name": "Blaze", "url": "#"},
+    {"name": "Betano", "url": "https://acesso-vip.site/brpix/?ref=XZUQWEZJ"},
+    
 ]
 
 @app.route("/")
