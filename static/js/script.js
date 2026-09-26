@@ -102,6 +102,27 @@ bettingHouse.addEventListener('change', () => {
   }
 });
 
+   // ===== QUANTIDADE DE MINAS / RISCO =====
+ const mineCountSelect = document.getElementById('mineCount');
+ const riskDisplay = document.getElementById('riskDisplay');
+
+ function updateRisk() {
+  const mines = Number(mineCountSelect.value);
+
+  const risks = {
+    1: 'BAIXO',
+    2: 'MODERADO',
+    3: 'MÉDIO',
+    4: 'ALTO',
+    5: 'MUITO ALTO'
+  };
+
+  riskDisplay.textContent = `Risco ${risks[mines]}`;
+}
+
+  mineCountSelect.addEventListener('change', updateRisk);
+  updateRisk();
+
 // ===== GERAR SINAL =====
 function generateSignal() {
   if (signalActive || !bettingHouse.value) return;
@@ -115,7 +136,9 @@ function generateSignal() {
   const cells = document.querySelectorAll('.cell');
   const stars = new Set();
 
-  while (stars.size < 3) {
+  const mineCount = Number(document.getElementById('mineCount').value);
+
+  while(stars.size < mineCount){
     stars.add(Math.floor(Math.random() * 25));
   }
 

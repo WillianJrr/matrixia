@@ -11,81 +11,213 @@
   <canvas id="matrix" aria-hidden="true"></canvas>
 
   <div class="page">
+
     <header class="header">
       <div>
         <div class="logo">MATRIX <span>IA</span></div>
         <div class="subtitle">Mines • Gerador de sinais</div>
       </div>
+
       <div class="online-pill">
         <span class="online-dot"></span>
         <strong id="onlineCount">47</strong> online
       </div>
     </header>
 
+
     <section class="stats" aria-label="Estatísticas">
+
       <div class="card">
         <span>Usuários</span>
         <h3 id="usersCount">186</h3>
       </div>
+
       <div class="card">
         <span>Sinais</span>
         <h3 id="signalsCount">29</h3>
       </div>
+
       <div class="card">
         <span>Acertos</span>
         <h3 id="hitsCount">87%</h3>
       </div>
+
       <div class="card status-card">
         <span>Status</span>
         <h3><i></i> ATIVO</h3>
       </div>
+
     </section>
 
+
     <main class="mines-box">
+
       <div class="mines-header">
         <div>
           <span class="eyebrow">PAINEL MINES</span>
           <h1>Gerar sinal</h1>
         </div>
+
         <div class="badge">VIP</div>
       </div>
 
+
+      <!-- CASA DE APOSTA -->
+
       <div class="controls">
+
         <label for="bettingHouse">Casa de aposta</label>
+
         <select id="bettingHouse">
-          <option value="" selected disabled>Selecione uma casa de aposta</option>
+
+          <option value="" selected disabled>
+            Selecione uma casa de aposta
+          </option>
+
           {% for house in betting_houses %}
-            <option value="{{ house.name }}" data-url="{{ house.url }}">
-                {{ house.name }}
-            </option>
+
+          <option
+            value="{{ house.name }}"
+            data-url="{{ house.url }}"
+          >
+            {{ house.name }}
+          </option>
+
           {% endfor %}
+
         </select>
-        <div id="houseMessage" class="house-message">Selecione uma casa para continuar.</div>
+
+        <div id="houseMessage" class="house-message">
+          Selecione uma casa para continuar.
+        </div>
+
       </div>
 
-      <div class="mines-info">
-        <span id="selectedHouse">Nenhuma casa selecionada</span>
-        <span>Risco baixo</span>
+
+      <!-- QUANTIDADE DE MINAS -->
+
+      <div class="controls">
+
+        <label for="mineCount">
+          Quantidade de minas
+        </label>
+
+        <select id="mineCount">
+
+          <option value="1">1 mina</option>
+          <option value="2">2 minas</option>
+          <option value="3" selected>3 minas</option>
+          <option value="4">4 minas</option>
+          <option value="5">5 minas</option>
+
+        </select>
+
       </div>
+
+
+      <!-- INFORMAÇÕES -->
+
+      <div class="mines-info">
+
+        <span id="selectedHouse">
+          Nenhuma casa selecionada
+        </span>
+
+        <span id="riskDisplay">
+          Risco baixo
+        </span>
+
+      </div>
+
+
+      <!-- GRID -->
 
       <div class="grid" id="grid"></div>
 
+
+      <!-- TIMER -->
+
       <div class="signal-time">
+
         <div>
+
           <span>Tempo Válido do Sinal</span>
-          <small>O próximo sinal será liberado quando chegar a 00:00</small>
+
+          <small>
+            O próximo sinal será liberado quando chegar a 00:00
+          </small>
+
         </div>
+
         <strong id="timer">02:00</strong>
+
       </div>
 
-      <button class="generate-btn" id="generateBtn" type="button">
+
+      <!-- BOTÃO -->
+
+      <button
+        class="generate-btn"
+        id="generateBtn"
+        type="button"
+      >
         SELECIONE A CASA
       </button>
+
+
+      <!-- SITE DA CASA DE APOSTA -->
+
+      <section
+        class="betting-site"
+        id="bettingSite"
+        style="display:none;"
+      >
+
+        <div class="betting-site-header">
+
+          <div>
+            <span class="eyebrow">
+              CASA DE APOSTA
+            </span>
+
+            <h2 id="bettingSiteName">
+              Bora1Bet
+            </h2>
+          </div>
+
+          <span class="site-status">
+            CONECTADO
+          </span>
+
+        </div>
+
+
+        <div class="betting-frame-container">
+
+          <iframe
+            id="bettingFrame"
+            title="Casa de aposta"
+            src="about:blank"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          ></iframe>
+
+        </div>
+
+      </section>
+
+
     </main>
 
-    <footer>Matrix IA © 2026</footer>
+
+    <footer>
+      Matrix IA © 2026
+    </footer>
+
   </div>
 
+
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 </body>
 </html>
