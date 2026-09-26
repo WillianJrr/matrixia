@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 BETTING_HOUSES = [
     {"name": "Bora1Bet", "url": "https://bora1bet.vip/register?code=TVSXVQIP1O"},
-    {"name": "Betano", "url": "https://acesso-vip.site/brpix/?ref=XZUQWEZJ"},
+    {"name": "BrPix", "url": "https://acesso-vip.site/brpix/?ref=XZUQWEZJ"},
     
 ]
 
