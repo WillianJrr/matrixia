@@ -83,7 +83,10 @@ function startTimer() {
 
 // ===== CASA DE APOSTA =====
 bettingHouse.addEventListener('change', () => {
-  const name = bettingHouse.value;
+  const selectedOption = bettingHouse.options[bettingHouse.selectedIndex];
+  const name = selectedOption.textContent;
+  const url = selectedOption.dataset.url;
+
   selectedHouse.textContent = name;
   houseMessage.textContent = `Casa selecionada: ${name}`;
   houseMessage.classList.add('ok');
@@ -91,6 +94,11 @@ bettingHouse.addEventListener('change', () => {
   if (!signalActive) {
     button.disabled = false;
     button.textContent = 'GERAR SINAL';
+  }
+
+  // Abre o site da casa selecionada
+  if (url && url !== '#') {
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 });
 

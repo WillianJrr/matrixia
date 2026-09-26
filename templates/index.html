@@ -55,7 +55,9 @@
         <select id="bettingHouse">
           <option value="" selected disabled>Selecione uma casa de aposta</option>
           {% for house in betting_houses %}
-            <option value="{{ house.name }}">{{ house.name }}</option>
+            <option value="{{ house.name }}" data-url="{{ house.url }}">
+                {{ house.name }}
+            </option>
           {% endfor %}
         </select>
         <div id="houseMessage" class="house-message">Selecione uma casa para continuar.</div>
